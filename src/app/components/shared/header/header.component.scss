@@ -1,0 +1,14 @@
+@import './../../../../styles.scss';
+
+.btn_blue {
+	@include buttonBlue();
+}
+
+header {
+	@include dFlex($jc: space-between);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+	padding: 30px 96px;
+}

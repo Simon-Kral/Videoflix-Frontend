@@ -1,0 +1,102 @@
+$breakpoints: (
+	xxs: 480px,
+	xs: 768px,
+	sm: 1024px,
+	md1: 1280px,
+	md2: 1366px,
+	md3: 1440px,
+	lg: 1600px,
+	xl: 1920px,
+);
+
+@mixin break($breakpoint) {
+	@if map-has-key($breakpoints, $breakpoint) {
+		$max-width: map-get($breakpoints, $breakpoint);
+		@media screen and (max-width: $max-width) {
+			@content;
+		}
+	} @else {
+		@error "Invalid breakpoint: #{$breakpoint}.";
+	}
+}
+
+@mixin dFlex($fd: row, $jc: center, $ai: center) {
+	display: flex;
+	flex-direction: $fd;
+	justify-content: $jc;
+	align-items: $ai;
+}
+
+@mixin font($weight: 400, $size: 16px, $color: black) {
+	font-variation-settings: 'wght' $weight;
+	font-weight: $weight;
+	font-size: $size;
+	color: $color;
+}
+
+@mixin buttonBlue() {
+	@include dFlex();
+	@include font($size: 18px, $weight: 700, $color: white);
+	gap: 4px;
+	line-height: 23px;
+	border-radius: 48px;
+	padding: 12.5px 24px;
+	background-color: $purple;
+	border: none;
+	cursor: pointer;
+	&:enabled:hover {
+		background-color: $purple-hover;
+	}
+	&:active {
+		background-color: $purple-80 !important;
+	}
+	&:disabled {
+		background-color: $purple-50 !important;
+	}
+	img {
+		filter: invert(100%) sepia(90%) saturate(0%) hue-rotate(268deg) brightness(101%) contrast(104%);
+	}
+	// responsive
+	@include break(sm) {
+	}
+}
+
+@mixin buttonWhite() {
+	@include dFlex();
+	@include font($size: 21px, $color: $pale-blue);
+	cursor: pointer;
+	img {
+		filter: invert(17%) sepia(6%) saturate(2976%) hue-rotate(176deg) brightness(100%) contrast(91%);
+	}
+	&:enabled:hover {
+		border: 1px solid $light-blue;
+		color: $light-blue;
+		box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+		img {
+			filter: invert(63%) sepia(70%) saturate(2190%) hue-rotate(165deg) brightness(92%) contrast(91%);
+		}
+	}
+	&:active {
+		border: 1px solid $dark-blue;
+		color: $dark-blue;
+		img {
+			filter: invert(9%) sepia(10%) saturate(6849%) hue-rotate(189deg) brightness(93%) contrast(99%);
+		}
+	}
+	&:disabled {
+		border: 1px solid $disabled;
+		color: $disabled;
+	}
+	// responsive
+	@include break(sm) {
+		@include font($size: 16px, $color: $pale-blue);
+		height: calc($height - 8px);
+	}
+}
+
+@mixin separator($width, $height, $color) {
+	width: $width;
+	height: $height;
+	background-color: $color;
+	border-radius: 32px;
+}

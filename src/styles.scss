@@ -1,1 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'app/mixins/general.scss';
+
+$bg: black;
+$purple: #2e3edf;
+$purple-hover: #2e63df;
+$purple-80: #2e3ddfcc;
+$purple-50: #2e3edf80;
+$link: #a8a8a8;
+$link-hover: #909090;
+$error: #ff002e;
+
+html {
+	scroll-behavior: smooth;
+}
+
+body {
+	background-color: $bg;
+	overflow: hidden;
+    color: $purple;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: 'DM Sans', sans-serif;
+	transition: all 100ms;
+	::-webkit-scrollbar {
+		background: transparent;
+		width: 6px;
+		height: 6px;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		border-radius: 24px;
+	}
+	::-webkit-scrollbar-thumb:hover {
+	}
+}
+
+@font-face {
+	font-family: 'DM Sans';
+	src: url('assets/fonts/DM_Sans/DMSans-VariableFont_opsz\,wght.ttf') format('truetype');
+}
+
+a {
+	cursor: pointer;
+}

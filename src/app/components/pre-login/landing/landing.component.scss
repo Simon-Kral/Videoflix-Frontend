@@ -1,0 +1,42 @@
+@import './../../../../styles.scss';
+
+.btn_blue {
+	@include buttonBlue();
+}
+
+main {
+	@include dFlex($fd: column);
+	gap: 32px;
+    width: 100%;
+	height: 100dvh;
+	.headline_container {
+		@include dFlex($fd: column);
+        gap: 24px;
+		h1 {
+			@include font($size: 48px, $weight: 700, $color: white);
+		}
+		h2 {
+			@include font($size: 18px, $weight: 400, $color: white);
+		}
+	}
+	.email_container {
+		@include dFlex();
+        gap: 16px;
+        input {
+            @include font($size: 18px, $weight: 400, $color: white);
+            width: 360px;
+            height: 48px;
+            padding-left: 24px;
+            background-color: transparent;
+            border: 1px solid white;
+            border-radius: 48px;
+            outline: none;
+            &:focus {
+                border: 1px solid $purple;
+            }
+            &::placeholder {
+				@include font($size: 18px, $weight: 400, $color: white);
+			}
+        }
+	}
+}
