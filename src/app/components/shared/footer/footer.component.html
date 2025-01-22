@@ -1,6 +1,6 @@
-<footer>
-    <nav>
-        <a>Datenschutz</a>
-        <a>Impressum</a>
-    </nav>
+<footer [ngClass]="{ pre_login: utilityService.locationSig() == 'pre_login', post_login: utilityService.locationSig() == 'post_login' }" class="unselectable">
+	<nav>
+		<a [routerLink]="['/privacy-policy']">Datenschutz</a>
+		<a [routerLink]="['/legal-notice']">Impressum</a>
+	</nav>
 </footer>

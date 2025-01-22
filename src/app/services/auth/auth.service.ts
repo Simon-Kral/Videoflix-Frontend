@@ -1,14 +1,18 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { lastValueFrom, Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { UserInterface } from '../../interfaces/user';
+
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root',
 })
 export class AuthService {
 	http = inject(HttpClient);
 	router = inject(Router);
+
+	currentUserSig = signal<UserInterface | null | undefined>(undefined);
 
 	constructor() {}
 
@@ -18,7 +22,7 @@ export class AuthService {
 	 * @returns {Promise<{ user: Object }>} A promise that resolves to the created user object.
 	 */
 	signup(user: any) {
-		const url = environment.baseUrl + '/signup/';
+		const url = environment.baseUrl + 'api/signup/';
 		const body = user;
 		return lastValueFrom(this.http.post(url, body) as Observable<{ user: Object }>);
 	}
@@ -29,7 +33,7 @@ export class AuthService {
 	 * @returns {Promise<{ token: string; user: Object }>} A promise that resolves to an object containing the authentication token and user data.
 	 */
 	loginWithEmailAndPassword(loginData: { email: string; password: string }) {
-		const url = environment.baseUrl + '/login/';
+		const url = environment.baseUrl + 'api/login/';
 		const body = loginData;
 		return lastValueFrom(this.http.post(url, body) as Observable<{ token: string; user: Object }>);
 	}
@@ -40,15 +44,15 @@ export class AuthService {
 	logout() {
 		localStorage.removeItem('token');
 		sessionStorage.removeItem('token');
-		this.router.navigateByUrl('');
+		this.router.navigateByUrl('/landing');
 	}
 
-  /**
+	/**
 	 * Fetches the current user's data from the server.
 	 * @returns {Promise<{ user: UserInterface }>} A promise that resolves to an object containing the current user data.
 	 */
 	getUser(): Promise<{ user: any }> {
-		const url = environment.baseUrl + '/user/';
+		const url = environment.baseUrl + 'api/user/';
 		return lastValueFrom(this.http.get(url) as Observable<{ user: any }>);
 	}
 }

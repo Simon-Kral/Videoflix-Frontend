@@ -5,8 +5,164 @@
 }
 
 main {
-	@include dFlex($fd: column);
-	gap: 32px;
-	width: 100%;
+	width: 100vw;
 	height: 100dvh;
+	padding-bottom: 800px;
+	overflow-y: auto;
+}
+
+h1 {
+	@include font($weight: 700, $size: 88px, $color: white);
+}
+
+h2 {
+	@include font($weight: 700, $size: 22px, $color: white);
+}
+
+.content_wrapper {
+	padding-left: 96px;
+}
+
+.main_recommendation {
+	@include dFlex($fd: column, $ai: flex-start);
+	gap: 32px;
+	height: 85dvh;
+
+	.description {
+		@include font($weight: 400, $size: 16px, $color: white);
+		max-width: 640px;
+	}
+}
+
+.videos_by_category {
+	overflow: hidden;
+	@include dFlex($fd: column, $ai: flex-start);
+	gap: calc(64px - 22.5px);
+	padding-bottom: 16px;
+	.video_category {
+		width: 100%;
+		.video_list_box {
+			position: relative;
+			.video_list {
+				@include dFlex($jc: flex-start);
+				gap: 8px;
+				width: fit-content;
+				height: 196px;
+				overflow: visible;
+				border-radius: 4px;
+				transition: all 300ms;
+				.videoBox {
+					position: relative;
+					height: 160px;
+					cursor: pointer;
+					.title {
+						@include font($weight: 600, $size: 16px, $color: white);
+						position: absolute;
+						top: 2%;
+						left: 2%;
+						text-shadow: 1px 1px 3px black, 1px 1px 3px black;
+					}
+					.thumbnail {
+						width: 284.4px;
+						height: 160px;
+						border-radius: 4px;
+						object-fit: cover;
+					}
+					&:hover {
+						margin-top: -32px;
+						margin-right: -68.88px;
+						margin-left: 12px;
+						z-index: 3;
+						.title {
+							@include font($weight: 600, $size: 19.2px, $color: white);
+							position: absolute;
+							top: 2%;
+							left: 2%;
+						}
+						.thumbnail {
+							width: 341.28px;
+							height: 192px;
+							box-shadow: 0 0 8px 1px rgba(0, 0, 0, 1);
+						}
+					}
+					&:first-child {
+						&:hover {
+							margin-right: -68.88px;
+							margin-left: 12px;
+						}
+					}
+					&:last-child {
+						&:hover {
+							margin-right: -56.88px;
+							margin-left: 6px;
+						}
+					}
+				}
+			}
+			.scroll_arrow {
+				@include dFlex();
+				position: absolute;
+				top: 15.5px;
+				width: 100px;
+				height: 165px;
+				background-color: transparent;
+				border: none;
+				cursor: pointer;
+				.bg_gradient {
+					@include dFlex();
+					width: 100px;
+					height: 160px;
+					&.disabled {
+						background-image: none !important;
+						img {
+							display: none !important;
+						}
+					}
+				}
+
+				img {
+					height: 60px;
+					filter: invert(100%) sepia(1%) saturate(2%) hue-rotate(174deg) brightness(106%) contrast(100%);
+				}
+				&.right {
+					right: 0;
+					.bg_gradient {
+						border-radius: 4px 0px 0px 4px;
+						background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.9));
+						&.hover {
+							background-image: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 1));
+						}
+					}
+				}
+				&.left {
+					left: 0;
+					.bg_gradient {
+						border-radius: 0px 4px 4px 0px;
+						background-image: linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0));
+						&.hover {
+							background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.6));
+						}
+					}
+					img {
+						transform: rotate(180deg);
+					}
+				}
+			}
+			.hoverbox {
+				@include dFlex();
+				position: absolute;
+				top: 15.5px;
+				width: 100px;
+				height: 165px;
+				cursor: pointer;
+				z-index: 5;
+				&.right {
+					right: 0;
+				}
+				&.left {
+					left: 0;
+				}
+			}
+		}
+	}
 }

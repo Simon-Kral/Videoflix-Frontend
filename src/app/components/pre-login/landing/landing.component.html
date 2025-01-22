@@ -1,13 +1,13 @@
 <main>
-    <div class="headline_container">
-        <h1>Movies, TV Shows and more</h1>
-        <h2>Enter your email to create or restart your subscription.</h2>
-    </div>
-    <div class="email_container">
-        <input type="email" placeholder="Email Address">
-        <button class="btn_blue">
-            <span>Sign Up</span>
-            <img src="assets/icons/arr_r.webp">
-        </button>
-    </div>
+	<div class="headline_container">
+		<h1>Movies, TV Shows and more</h1>
+		<h2>Enter your email to create or restart your subscription.</h2>
+	</div>
+	<div class="email_container">
+		<input type="email" placeholder="Email Address" />
+		<button class="btn_blue" [routerLink]="['/registration']">
+			<span>Sign Up</span>
+			<img src="assets/icons/chevron_right.webp" />
+		</button>
+	</div>
 </main>

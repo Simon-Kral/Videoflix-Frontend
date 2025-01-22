@@ -20,12 +20,12 @@
 						"outputPath": "dist/videoflix",
 						"index": "src/index.html",
 						"browser": "src/main.ts",
-						"polyfills": ["zone.js"],
+						"polyfills": ["./zone-flags", "zone.js"],
 						"tsConfig": "tsconfig.app.json",
 						"inlineStyleLanguage": "scss",
 						"assets": ["src/assets"],
 						"styles": ["node_modules/@videogular/ngx-videogular/fonts/videogular.css", "src/styles.scss"],
-						"scripts": []
+						"scripts": ["node_modules/hls.js/dist/hls.min.js"]
 					},
 					"configurations": {
 						"production": {

@@ -1,0 +1,32 @@
+@import './../../../../styles.scss';
+
+.bg_img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -2;
+	width: 100%;
+	height: 100dvh;
+	background-position: center;
+	background-size: cover;
+}
+
+.bg_grad {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: -1;
+	width: 100%;
+	height: 100dvh;
+	background-image: linear-gradient(#000000, #0000008c, #000000);
+}
+
+.bg_video {
+}
+
+.content {
+	// @include dFlex($fd: column);
+	// gap: 32px;
+	// width: 100%;
+	// height: 100dvh;
+}

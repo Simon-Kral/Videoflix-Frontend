@@ -1,17 +1,36 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth.service';
+import { UtilityService } from '../../../services/utility/utility.service';
+import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'app-header',
-  standalone: true,
-  imports: [],
-  templateUrl: './header.component.html',
-  styleUrl: './header.component.scss'
+	selector: 'app-header',
+	standalone: true,
+	imports: [RouterLink, NgClass],
+	templateUrl: './header.component.html',
+	styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  router = inject(Router);
+	currentRouteSig = signal<String>('');
 
-  login() {
-    this.router.navigateByUrl('home')
-  }
+	authService = inject(AuthService);
+	utilityService = inject(UtilityService);
+
+	constructor(private router: Router) {
+		router.events.subscribe((val) => {
+			if (val instanceof NavigationEnd) {
+				this.currentRouteSig.update(() => val.url);
+				// console.log(this.currentRouteSig());
+			}
+		});
+	}
+
+	login() {
+		this.router.navigateByUrl('browse');
+	}
+
+	logout() {
+		this.authService.logout();
+	}
 }

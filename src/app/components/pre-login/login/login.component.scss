@@ -1,0 +1,73 @@
+@import './../../../../styles.scss';
+
+.btn_blue {
+	@include buttonBlue();
+}
+
+.wrapper {
+	@include dFlex();
+	height: 100dvh;
+	.card {
+		@include dFlex($fd: column, $jc: space-between);
+		gap: 16px;
+		width: 520px;
+		padding: 43px 56px;
+		background-color: white;
+		border-radius: 48px;
+		form {
+			@include dFlex($fd: column);
+			gap: 13px;
+			width: 100%;
+			h1 {
+				margin-bottom: 19px;
+			}
+		}
+	}
+}
+
+.form_element {
+	@include formElement();
+}
+
+.input_element {
+	@include inputElement();
+}
+
+.input_img {
+	@include inputImg();
+}
+
+.checkbox_element {
+	@include checkboxElement();
+}
+
+.checkbox_with_spinner {
+	@include dFlex($ai: center, $jc: space-between);
+	gap: 64px;
+	width: 100%;
+	.default_form_input {
+		margin-bottom: 0;
+	}
+	// responsive
+	@include break(sm) {
+		gap: 50px;
+	}
+	@include break(xxs) {
+		gap: 8px;
+	}
+}
+
+nav {
+	@include dFlex($fd: column);
+	gap: 16px;
+	.new_to_videoflix {
+		@include dFlex();
+		gap: 16px;
+	}
+	.text {
+		@include font($weight: 500, $size: 18px, $color: black);
+	}
+	.link {
+		@include font($weight: 700, $size: 18px, $color: $purple);
+	}
+}

@@ -1,4 +1,5 @@
 @import 'app/mixins/general.scss';
+@import 'app/mixins/form.scss';
 
 $bg: black;
 $purple: #2e3edf;
@@ -7,6 +8,7 @@ $purple-80: #2e3ddfcc;
 $purple-50: #2e3edf80;
 $link: #a8a8a8;
 $link-hover: #909090;
+$li-grey: #eeeeee;
 $error: #ff002e;
 
 html {
@@ -16,7 +18,7 @@ html {
 body {
 	background-color: $bg;
 	overflow: hidden;
-    color: $purple;
+	color: $purple;
 }
 
 * {
@@ -24,20 +26,21 @@ body {
 	padding: 0;
 	box-sizing: border-box;
 	font-family: 'DM Sans', sans-serif;
-	transition: all 100ms;
+	transition: all 200ms;
 	::-webkit-scrollbar {
-		background: transparent;
-		width: 6px;
-		height: 6px;
+		display: none;
+		// background: transparent;
+		// width: 6px;
+		// height: 6px;
 	}
-	::-webkit-scrollbar-track {
-		background: transparent;
-	}
-	::-webkit-scrollbar-thumb {
-		border-radius: 24px;
-	}
-	::-webkit-scrollbar-thumb:hover {
-	}
+	// ::-webkit-scrollbar-track {
+	// 	background: transparent;
+	// }
+	// ::-webkit-scrollbar-thumb {
+	// 	border-radius: 24px;
+	// }
+	// ::-webkit-scrollbar-thumb:hover {
+	// }
 }
 
 @font-face {
@@ -46,5 +49,37 @@ body {
 }
 
 a {
+	text-decoration: none;
 	cursor: pointer;
+	&:hover {
+		text-decoration: underline;
+		text-shadow: 0px 0px 5px white;
+	}
+}
+
+.spinner_container {
+	width: 56px;
+	height: 56px;
+	.loading_spinner {
+		width: 56px;
+		height: 56px;
+	}
+	// responsive
+	// @include break(md2) {
+	// 	width: 32px;
+	// 	height: 32px;
+	// 	.loading_spinner {
+	// 		width: 32px;
+	// 		height: 32px;
+	// 	}
+	// }
+}
+
+.unselectable {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }

@@ -1,4 +1,47 @@
-<main>
-	<p>browse works!</p>
-	<app-videoplayer></app-videoplayer>
+<main (scroll)="onScrollVert($event)" class="unselectable">
+	@if (videoService.fsVideoUrlSig()) {
+	<app-videoplayer [bgVideo]="false"></app-videoplayer>
+	}
+	<div class="content_wrapper">
+		<section class="main_recommendation">
+			<h1>{{ videoService.mainVideoSig()?.title }}</h1>
+			<span class="description">{{ videoService.mainVideoSig()?.description }}</span>
+			<button class="btn_blue" (click)="videoService.playVideo('fullscreen')">
+				<img src="assets/icons/play_arrow.webp" />
+				<span>Play</span>
+			</button>
+		</section>
+		<section class="videos_by_category">
+			@for (category of videosByCategorySig(); track category; let i = $index) {
+			<div class="video_category">
+				<h2>{{ category.title }}</h2>
+				<div class="video_list_box">
+					<div class="video_list" #videoList (domChange)="onDomChange($event)">
+						@for (video of category.videos; track video; let j = $index) {
+						<div class="videoBox" (mouseenter)="toggleBgGradients(i, 'hide')" (mouseleave)="toggleBgGradients(i, 'show')" (click)="videoService.openVideo(video)">
+							<span class="title">{{ video.title }}</span>
+							<img class="thumbnail" src="{{ video.thumbnail }}" />
+						</div>
+						}
+					</div>
+					@if (!(atMinScrollPosition(videoList))) {
+					<button class="scroll_arrow left">
+						<div class="bg_gradient idx{{ $index }}" #bgGradientLeft>
+							<img src="assets/icons/arrow_forward.webp" />
+						</div>
+					</button>
+					<div class="hoverbox left" (mouseenter)="bgGradientLeft.classList.add('hover')" (mouseleave)="bgGradientLeft.classList.remove('hover')" (click)="handleScroll(videoList, 'left')"></div>
+					} @if (!atMaxScrollPosition(videoList)) {
+					<button class="scroll_arrow right">
+						<div class="bg_gradient idx{{ $index }}" #bgGradientRight>
+							<img src="assets/icons/arrow_forward.webp" />
+						</div>
+					</button>
+					<div class="hoverbox right" (mouseenter)="bgGradientRight.classList.add('hover')" (mouseleave)="bgGradientRight.classList.remove('hover')" (click)="handleScroll(videoList, 'right')"></div>
+					}
+				</div>
+			</div>
+			}
+		</section>
+	</div>
 </main>
