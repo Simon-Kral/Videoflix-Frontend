@@ -1,0 +1,84 @@
+@import '../styles.scss';
+
+.notifications {
+	@include dFlex($fd: column, $ai: flex-start);
+	gap: 16px;
+	position: absolute;
+	bottom: calc(map-get($footer-height, large) + 32px);
+	left: 32px;
+	@include break(md2) {
+		bottom: calc(map-get($footer-height, medium) + 32px);
+	}
+}
+
+.notification {
+	@include dFlex($jc: space-between);
+	gap: 16px;
+	min-width: 320px;
+	max-width: calc(100vw - 64px);
+	z-index: 3;
+	padding: 19px;
+	border-radius: 20px;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
+	animation: fadeIn 500ms;
+	background-image: linear-gradient(to right, $error, $error), linear-gradient(to right, $purple, $purple);
+	background-repeat: no-repeat;
+	background-position: 0 0, 20px 0;
+	background-size: 20px auto, auto auto;
+	.message {
+		@include dFlex();
+		gap: 16px;
+		.ml13 {
+			margin-left: 13px;
+		}
+		span {
+			@include font($size: 20px, $color: white);
+			max-width: 500px;
+		}
+		img {
+			filter: invert(100%) sepia(90%) saturate(0%) hue-rotate(268deg) brightness(101%) contrast(104%);
+			width: 32px;
+			height: 32px;
+		}
+	}
+	.close {
+		@include dFlex();
+		gap: 16px;
+		.separator {
+			@include separator($width: 2px, $height: 32px, $color: white);
+			margin-left: 16px;
+		}
+		button {
+			@include dFlex();
+			background-color: transparent;
+			border: none;
+			height: 32px;
+			width: 32px;
+			margin-left: -8px;
+			border-radius: 32px;
+			cursor: pointer;
+			&:hover {
+				background-color: rgba(255, 255, 255, 0.2);
+			}
+			&:active {
+				background-color: rgba(255, 255, 255, 0.1);
+			}
+		}
+		img {
+			filter: invert(100%) sepia(90%) saturate(0%) hue-rotate(268deg) brightness(101%) contrast(104%);
+			width: 32px;
+			height: 32px;
+		}
+	}
+}
+
+@keyframes fadeIn {
+	0%,
+	100%,
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}

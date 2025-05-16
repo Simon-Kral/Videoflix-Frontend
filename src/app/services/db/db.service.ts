@@ -3,8 +3,9 @@ import { inject, Injectable, signal } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { environment } from '../../../environments/environment';
 import { lastValueFrom, Observable } from 'rxjs';
-import { Video } from '../../interfaces/video';
+import { VideoResponse } from '../../interfaces/video-response';
 import { Category } from '../../interfaces/category';
+import { UtilityService } from '../utility/utility.service';
 
 @Injectable({
 	providedIn: 'root',
@@ -12,48 +13,36 @@ import { Category } from '../../interfaces/category';
 export class DbService {
 	http = inject(HttpClient);
 	authService = inject(AuthService);
-
-	backendErrorsSig = signal<any>(undefined);
+	utilityService = inject(UtilityService);
 
 	constructor() {}
 
 	handleBackendErrors(error: unknown) {
 		if (error instanceof HttpErrorResponse) {
-			this.renderBackendErrors(error);
-		}
-	}
-
-	renderBackendErrors(error: HttpErrorResponse) {
-		this.backendErrorsSig.update(() => {
-			let backendErrors = [];
-			for (let value of Object.values(error.error)) {
-				backendErrors.push(value);
+			let err;
+			switch (error.status) {
+				case 500:
+					err = 'Internal Server Error.';
+					break;
+				case 0:
+					err = 'Server not reachable.';
+					break;
+				default:
+					err = Object.values(error.error)[0] as string;
+					break;
 			}
-			return [...backendErrors];
-		});
-	}
-
-	resetBackendErrors() {
-		this.backendErrorsSig.update(() => undefined);
+			this.utilityService.notificateUser(err);
+		}
 	}
 
 	getData(endpoint: String) {
 		const url = environment.baseUrl + endpoint;
-		return lastValueFrom(this.http.get(url) as Observable<Video[] | Category[]>);
+		return lastValueFrom(this.http.get(url) as Observable<any>);
 	}
 
-	getCategoryList() {
-		const url = environment.baseUrl + 'api/categories/';
-		return lastValueFrom(this.http.get(url) as Observable<Category[]>);
-	}
-
-	getVideoList() {
-		const url = environment.baseUrl + 'api/videos/';
-		return lastValueFrom(this.http.get(url) as Observable<Video[]>);
-	}
-
-	getVideo(id: String) {
-		const url = environment.baseUrl + 'api/videos/' + id;
-		return lastValueFrom(this.http.get(url) as Observable<Video>);
+	postData(endpoint: String, data: Object) {
+		const url = environment.baseUrl + endpoint;
+		const body = data;
+		return lastValueFrom(this.http.post(url, body) as Observable<any>);
 	}
 }

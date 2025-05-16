@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import { UtilityService } from '../../../services/utility/utility.service';
 import { NgClass } from '@angular/common';
+import { VideoService } from '../../../services/video/video.service';
 
 @Component({
 	selector: 'app-header',
@@ -12,25 +13,15 @@ import { NgClass } from '@angular/common';
 	styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-	currentRouteSig = signal<String>('');
-
 	authService = inject(AuthService);
 	utilityService = inject(UtilityService);
+	videoService = inject(VideoService);
 
-	constructor(private router: Router) {
-		router.events.subscribe((val) => {
-			if (val instanceof NavigationEnd) {
-				this.currentRouteSig.update(() => val.url);
-				// console.log(this.currentRouteSig());
-			}
-		});
-	}
-
-	login() {
-		this.router.navigateByUrl('browse');
-	}
+	constructor() {}
 
 	logout() {
+		this.utilityService.observer?.disconnect();
+		this.videoService.bgVideoUrlSig.update(() => undefined);
 		this.authService.logout();
 	}
 }

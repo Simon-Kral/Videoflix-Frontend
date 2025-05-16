@@ -1,19 +1,19 @@
-<header [ngClass]="{ solid: utilityService.scrollPositionSig() != 0 }" class="unselectable">
-	<a>
-		<img src="../../../../assets/logos/logo_w_text.webp" [routerLink]="['/']" />
+<header [ngClass]="{ solid: utilityService.scrollPositionSig() != 0 }">
+	<a [routerLink]="['/']">
+		<div class="logo"></div>
 	</a>
-	@if ( utilityService.inPreLogin(currentRouteSig()) && currentRouteSig() != '/login' ) {
-	<nav>
-		<button class="btn_blue" [routerLink]="['/login']">
-			<span>Log In</span>
-		</button>
-	</nav>
-	} @else if (utilityService.inPostLogin(currentRouteSig())) {
-	<nav>
-		<button class="btn_blue" (click)="logout()">
-			<img src="assets/icons/logout.webp" />
-			<span>Log Out</span>
-		</button>
-	</nav>
+	@if ( utilityService.inPreLogin() && this.utilityService.currentUrl != '/login' ) {
+	<button class="btn_blue" [routerLink]="['/login']">
+		<span>Log In</span>
+	</button>
+	} @else if (utilityService.inPostLogin()) {
+	<button class="btn_blue" (click)="logout()">
+		<img src="assets/icons/logout.webp" />
+		<span>Log Out</span>
+	</button>
+	} @else if (utilityService.inLegals()) {
+	<a class="arrow_back" [routerLink]="['/']">
+		<img src="assets/icons/arrow_back.webp" />
+	</a>
 	}
 </header>

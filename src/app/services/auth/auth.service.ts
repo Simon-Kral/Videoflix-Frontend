@@ -22,7 +22,7 @@ export class AuthService {
 	 * @returns {Promise<{ user: Object }>} A promise that resolves to the created user object.
 	 */
 	signup(user: any) {
-		const url = environment.baseUrl + 'api/signup/';
+		const url = environment.baseUrl + 'api/registration/';
 		const body = user;
 		return lastValueFrom(this.http.post(url, body) as Observable<{ user: Object }>);
 	}
@@ -39,12 +39,24 @@ export class AuthService {
 	}
 
 	/**
-	 * Logs out the current user by clearing the token from local and session storage and redirecting to the home page.
+	 * Logs out the current user by clearing the token from local and session storage and redirecting to the landing page.
 	 */
 	logout() {
 		localStorage.removeItem('token');
 		sessionStorage.removeItem('token');
 		this.router.navigateByUrl('/landing');
+	}
+
+	forgotPassword(email: string) {
+		const url = environment.baseUrl + 'api/forgot-password/';
+		const body = { email: email };
+		return lastValueFrom(this.http.post(url, body) as Observable<{ message: string }>);
+	}
+
+	resetPassword(data: { uidb64: string; token: string; password: string; repeated_password: string }) {
+		const url = environment.baseUrl + 'api/reset-password/' + data.uidb64 + '/' + data.token;
+		const body = { password: data.password, repeated_password: data.repeated_password };
+		return lastValueFrom(this.http.post(url, body) as Observable<{ message: string }>);
 	}
 
 	/**

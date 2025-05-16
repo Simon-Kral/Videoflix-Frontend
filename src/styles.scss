@@ -11,6 +11,16 @@ $link-hover: #909090;
 $li-grey: #eeeeee;
 $error: #ff002e;
 
+$header-height: (
+	medium: 72px,
+	large: 108px,
+);
+
+$footer-height: (
+	medium: 64px,
+	large: 104px,
+);
+
 html {
 	scroll-behavior: smooth;
 }
@@ -19,6 +29,12 @@ body {
 	background-color: $bg;
 	overflow: hidden;
 	color: $purple;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 * {
@@ -57,12 +73,23 @@ a {
 	}
 }
 
+.error_message {
+	@include font($color: $error, $size: 12px);
+}
+.backend_errors {
+	min-width: 1px;
+	min-height: 21px;
+	.backend_error {
+		@include font($color: $error);
+	}
+}
+
 .spinner_container {
-	width: 56px;
-	height: 56px;
+	width: 48px;
+	height: 48px;
 	.loading_spinner {
-		width: 56px;
-		height: 56px;
+		width: 48px;
+		height: 48px;
 	}
 	// responsive
 	// @include break(md2) {

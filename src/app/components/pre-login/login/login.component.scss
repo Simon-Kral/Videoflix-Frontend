@@ -16,7 +16,7 @@
 		border-radius: 48px;
 		form {
 			@include dFlex($fd: column);
-			gap: 13px;
+			gap: 8px;
 			width: 100%;
 			h1 {
 				margin-bottom: 19px;
@@ -41,19 +41,13 @@
 	@include checkboxElement();
 }
 
-.checkbox_with_spinner {
-	@include dFlex($ai: center, $jc: space-between);
-	gap: 64px;
+.form_button_wrap {
+	@include dFlex();
+	position: relative;
 	width: 100%;
-	.default_form_input {
-		margin-bottom: 0;
-	}
-	// responsive
-	@include break(sm) {
-		gap: 50px;
-	}
-	@include break(xxs) {
-		gap: 8px;
+	.spinner_container {
+		position: absolute;
+		left: 0;
 	}
 }
 

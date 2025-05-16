@@ -1,5 +1,5 @@
-<vg-player (onPlayerReady)="onPlayerReady($event)" [ngClass]="{ bg_video: bgVideo }">
-	@if (!bgVideo) {
+<vg-player (onPlayerReady)="onPlayerReady($event)" [ngClass]="{ bg_video: playInBackground }">
+	@if (!playInBackground) {
 	<vg-overlay-play />
 	<vg-buffering />
 	<vg-scrub-bar [vgSlider]="true" class="scrub_bar">
@@ -21,5 +21,5 @@
 		<vg-fullscreen></vg-fullscreen>
 	</vg-controls>
 	}
-	<video [vgMedia]="$any(media)" #media preload="auto" autoplay playsinline crossorigin loop (loadedmetadata)="media.muted = bgVideo" #vgHls="vgHls" [vgHls]="this.playerService.bgVideoUrlSig() ?? this.playerService.fsVideoUrlSig()!" (onGetBitrates)="addBitrates($event)"></video>
+	<video [vgMedia]="$any(media)" #media preload="auto" autoplay playsinline crossorigin (loadedmetadata)="media.muted = playInBackground" #vgHls="vgHls" [vgHls]="this.videoService.bgVideoUrlSig() ?? this.videoService.fsVideoUrlSig()!" (onGetBitrates)="addBitrates($event)"></video>
 </vg-player>

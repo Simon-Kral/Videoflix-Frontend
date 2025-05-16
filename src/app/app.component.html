@@ -1,1 +1,17 @@
 <router-outlet />
+<section class="notifications">
+	@for (notification of utilityService.notifications; track $index) {
+	<div class="notification">
+		<div class="message">
+			<img class="ml13" src="assets/icons/exclamation_circle.webp" />
+			<span>{{ utilityService.notifications[$index] }}</span>
+		</div>
+		<div class="close">
+			<div class="separator"></div>
+			<button (click)="utilityService.notifications.splice($index, 1)">
+				<img src="assets/icons/close.webp" />
+			</button>
+		</div>
+	</div>
+	}
+</section>

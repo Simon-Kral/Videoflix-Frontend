@@ -4,13 +4,15 @@
 			<h1>Log In</h1>
 			<div class="form_element">
 				<div class="input_element" [ngClass]="{ invalid: utilityService.formInvalid(loginForm.controls.email) }">
-					<input type="email" placeholder="Email" formControlName="email" (focus)="dbService.resetBackendErrors()" />
+					<input type="email" placeholder="Email Address" formControlName="email" />
 					<div class="input_img">
 						<img src="assets/icons/mail.webp" />
 					</div>
 				</div>
 				<div class="element_errors">
-					@if (utilityService.formInvalid(loginForm.controls.email)) { @if (loginForm.controls.email.errors?.['required']) {
+					@if (utilityService.formInvalid(loginForm.controls.email)) {
+					<img src="assets/icons/warning.webp" />
+					@if (loginForm.controls.email.errors?.['required']) {
 					<span class="error_message">Please enter an email address.</span>
 					} @if (loginForm.controls.email.errors?.['email']) {
 					<span class="error_message"> This is not a valid email address. </span>
@@ -25,10 +27,12 @@
 					</div>
 				</div>
 				<div class="element_errors">
-					@if (utilityService.formInvalid(loginForm.controls.password)) { @if (loginForm.controls.password.errors?.['required']) {
+					@if (utilityService.formInvalid(loginForm.controls.password)) {
+					<img src="assets/icons/warning.webp" />
+					@if (loginForm.controls.password.errors?.['required']) {
 					<span class="error_message">Please enter a password.</span>
 					} @if (loginForm.controls.password.errors?.['minlength']) {
-					<span class="error_message"> The password must be at least 6 characters long. </span>
+					<span class="error_message"> The password must be at least 8 characters long. </span>
 					} }
 				</div>
 			</div>
@@ -37,30 +41,26 @@
 					<input type="checkbox" formControlName="rememberMe" />
 					<span>Remember me</span>
 				</div>
+			</div>
+			<div class="form_button_wrap">
 				<div class="spinner_container">
 					@if (utilityService.loading) {
 					<img src="assets/icons/spinner_pale_blue.gif" class="loading_spinner" />
 					}
 				</div>
-			</div>
-			<div class="backend_errors">
-				@for (error of dbService.backendErrorsSig(); track $index) {
-				<span class="backend_error">{{ error }}</span
-				><br />
-				}
-			</div>
-			<div class="form_button_wrap">
-				<button class="btn_blue" type="submit" [disabled]="!loginForm.valid">Log in</button>
+				<button class="btn_blue" type="submit" [disabled]="!loginForm.valid">
+					<span>Log in</span>
+				</button>
 				<!-- <button class="button_white" type="button" (click)="loginGuest()">Guest Log in</button> -->
 			</div>
 		</form>
 		<nav>
-			<a>
+			<a [routerLink]="['/forgot-password']">
 				<span class="link">Forgot Password?</span>
 			</a>
 			<div class="new_to_videoflix">
 				<span class="text">New to Videoflix?</span>
-				<a>
+				<a [routerLink]="['/signup']">
 					<span class="link">Sign up now</span>
 				</a>
 			</div>

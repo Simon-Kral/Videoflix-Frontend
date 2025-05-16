@@ -30,7 +30,6 @@ export class LoginComponent {
 	});
 
 	async onSubmit(): Promise<void> {
-		console.log('login');
 		this.utilityService.loading = true;
 		try {
 			await this.loginUser();
@@ -40,7 +39,7 @@ export class LoginComponent {
 		this.utilityService.loading = false;
 	}
 
-	async loginUser(): Promise<void> {
+	async loginUser(): Promise<void | null> {
 		let loginData = this.createloginData();
 		let rememberMe = this.loginForm.controls.rememberMe.value;
 		let resp: { token: string; user: Object } = await this.authService.loginWithEmailAndPassword(loginData);

@@ -1,20 +1,25 @@
 @mixin formElement() {
 	width: 100%;
 	.element_errors {
+		@include dFlex($jc: flex-start);
+		gap: 4px;
 		width: 100%;
-		height: 22px;
-		min-height: 22px;
+		height: 28px;
+		min-height: 28px;
+		img {
+			filter: invert(14%) sepia(63%) saturate(7483%) hue-rotate(343deg) brightness(95%) contrast(112%);
+		}
 		.error_message {
-			@include font($color: $error, $size: 12px);
+			@include font($color: $error, $size: 15px);
 		}
 		// responsive
-		@include break(sm) {
-			height: 19px;
-			min-height: 19px;
-			.error_message {
-				@include font($color: $error, $size: 10px);
-			}
-		}
+		// @include break(sm) {
+		// 	height: 28px;
+		// 	min-height: 28px;
+		// 	.error_message {
+		// 		@include font($color: $error, $size: 15px);
+		// 	}
+		// }
 	}
 }
 
@@ -38,38 +43,22 @@
 		min-width: 50px;
 		border: none;
 		outline: none;
+		transition: none;
 		&::placeholder {
 			@include font($size: 20px, $color: $ph-color);
 		}
 		// responsive
-		@include break(sm) {
-			@include font($size: 16px);
-			&::placeholder {
-				@include font($size: 16px, $color: $ph-color);
-			}
-		}
+		// @include break(sm) {
+		// 	@include font($size: 16px);
+		// 	&::placeholder {
+		// 		@include font($size: 16px, $color: $ph-color);
+		// 	}
+		// }
 	}
-	// input[type='date'] {
-	// 	position: absolute;
-	// 	right: 18px;
-	// 	top: calc(50% - 12px);
-	// 	border: 0;
-	// 	width: 22px;
-	// 	height: 24px;
-	// 	&::-webkit-calendar-picker-indicator {
-	// 		color: rgba(0, 0, 0, 0);
-	// 		display: block;
-	// 		background: url('../../assets/img/calendar.svg') center no-repeat;
-	// 		width: 18px;
-	// 		height: 20px;
-	// 		cursor: pointer;
-	// 	}
+	// @include break(sm) {
+	// 	height: 40px;
+	// 	padding: 0px 12px;
 	// }
-	// responsive
-	@include break(sm) {
-		height: 40px;
-		padding: 0px 12px;
-	}
 }
 
 @mixin inputImages($height: 24px, $gap: 4px) {
@@ -98,54 +87,6 @@
 	}
 }
 
-// @mixin textareaElement() {
-// 	@include dFlex();
-// 	position: relative;
-// 	width: 100%;
-// 	&::after {
-// 		position: absolute;
-// 		pointer-events: none;
-// 		content: '';
-// 		height: 19px;
-// 		width: 19px;
-// 		bottom: 6px;
-// 		right: 6px;
-// 		background: url('../../assets/img/resize_handler.svg') no-repeat;
-// 	}
-// 	textarea {
-// 		@include font($size: 20px);
-// 		width: 100%;
-// 		height: 122px;
-// 		border: 1px solid $light-grey;
-// 		border-radius: 10px;
-// 		padding: 12px 21px;
-// 		resize: none;
-// 		&::placeholder {
-// 			@include font($size: 20px, $color: $light-grey);
-// 		}
-// 		&:focus {
-// 			outline: none;
-// 			border: 1px solid $light-blue;
-// 		}
-// 		&::-webkit-resizer {
-// 			display: none;
-// 		}
-// 		// responsive
-// 		@include break(sm) {
-// 			height: 108px;
-// 			@include font($size: 16px);
-// 			&::placeholder {
-// 				@include font($size: 16px, $color: $light-grey);
-// 			}
-// 		}
-// 		&::-webkit-scrollbar-button {
-// 			background: transparent;
-// 			width: 6px;
-// 			height: 6px;
-// 		}
-// 	}
-// }
-
 @mixin checkboxElement() {
 	@include dFlex();
 	input[type='checkbox'] {
@@ -170,268 +111,7 @@
 	span {
 		@include font($size: 16px);
 		max-width: 300px;
-		// margin-top: 2px;
-		// responsive
-		@include break(sm) {
-		}
+		// @include break(sm) {
+		// }
 	}
 }
-
-// @mixin selectedContactList() {
-// 	@include dFlex($jc: flex-start);
-// 	flex-wrap: wrap;
-// 	gap: 7.5px;
-// }
-
-// @mixin selectPrioButtonsElement() {
-// 	@include dFlex($jc: space-between);
-// 	width: 100%;
-// 	margin-bottom: 20px;
-// 	label {
-// 		@include dFlex();
-// 		gap: 8px;
-// 		width: 136px;
-// 		padding: 16px 0px;
-// 		border-radius: 10px;
-// 		box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
-// 		background-color: white;
-// 		// responsive
-// 		@include break(sm) {
-// 			width: 120px;
-// 			padding: 11px 0px;
-// 		}
-// 		@include break(xxs) {
-// 			width: 88px;
-// 		}
-// 		span {
-// 			@include font($size: 21px);
-// 			// responsive
-// 			@include break(sm) {
-// 				@include font($size: 16px);
-// 			}
-// 			@include break(xxs) {
-// 				@include font($size: 12px);
-// 			}
-// 		}
-// 		img {
-// 			@include break(sm) {
-// 				width: 18px;
-// 			}
-// 			@include break(xxs) {
-// 				width: 14px;
-// 			}
-// 		}
-// 		&.urgent {
-// 			img {
-// 				filter: invert(32%) sepia(41%) saturate(6581%) hue-rotate(2deg) brightness(102%) contrast(105%);
-// 			}
-// 			&.selected_prio {
-// 				background-color: #ff3d00;
-// 				span {
-// 					@include font($size: 21px, $color: white, $weight: 700);
-// 					// responsive
-// 					@include break(sm) {
-// 						@include font($size: 16px, $color: white, $weight: 700);
-// 					}
-// 					@include break(xxs) {
-// 						@include font($size: 12px, $color: white, $weight: 700);
-// 					}
-// 				}
-// 				img {
-// 					filter: invert(97%) sepia(100%) saturate(11%) hue-rotate(217deg) brightness(105%) contrast(104%);
-// 				}
-// 			}
-// 		}
-// 		&.medium {
-// 			img {
-// 				filter: invert(69%) sepia(8%) saturate(6400%) hue-rotate(358deg) brightness(100%) contrast(105%);
-// 			}
-// 			&.selected_prio {
-// 				background-color: #ffa800;
-// 				span {
-// 					@include font($size: 21px, $color: white, $weight: 700);
-// 					// responsive
-// 					@include break(sm) {
-// 						@include font($size: 16px, $color: white, $weight: 700);
-// 					}
-// 					@include break(xxs) {
-// 						@include font($size: 12px, $color: white, $weight: 700);
-// 					}
-// 				}
-// 				img {
-// 					filter: invert(97%) sepia(100%) saturate(11%) hue-rotate(217deg) brightness(105%) contrast(104%);
-// 				}
-// 			}
-// 		}
-// 		&.low {
-// 			img {
-// 				filter: invert(82%) sepia(98%) saturate(2202%) hue-rotate(32deg) brightness(97%) contrast(83%);
-// 			}
-// 			&.selected_prio {
-// 				background-color: #7ae229;
-// 				span {
-// 					@include font($size: 21px, $color: white, $weight: 700);
-// 					// responsive
-// 					@include break(sm) {
-// 						@include font($size: 16px, $color: white, $weight: 700);
-// 					}
-// 					@include break(xxs) {
-// 						@include font($size: 12px, $color: white, $weight: 700);
-// 					}
-// 				}
-// 				img {
-// 					filter: invert(97%) sepia(100%) saturate(11%) hue-rotate(217deg) brightness(105%) contrast(104%);
-// 				}
-// 			}
-// 		}
-// 		&:hover {
-// 			box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-// 			cursor: pointer;
-// 		}
-// 	}
-// }
-
-// @mixin subtaskList() {
-// 	@include dFlex($fd: column, $ai: flex-start, $jc: flex-start);
-// 	max-height: 100px;
-// 	overflow-y: auto;
-// 	.subtask_element {
-// 		@include dFlex($jc: flex-start);
-// 		width: 100%;
-// 		min-height: 32px;
-// 		padding: 0px 16px;
-// 		border-radius: 10px;
-// 		cursor: pointer;
-// 		// responsive
-// 		@include break(xxs) {
-// 			padding: 0px 8px;
-// 		}
-// 		&:hover {
-// 			background-color: $li-grey;
-// 			.subtask {
-// 				.input_images {
-// 					display: flex;
-// 				}
-// 			}
-// 		}
-// 		&.subtask_element_edit {
-// 			background-color: white;
-// 			border-radius: 0px;
-// 			border-bottom: 1px solid $light-blue;
-// 		}
-// 		.subtask {
-// 			@include dFlex($jc: space-between);
-// 			width: 100%;
-// 			.subtask_list_item {
-// 				margin-left: 32px;
-// 				cursor: pointer;
-// 				.subtask_title {
-// 					display: -webkit-box;
-// 					-webkit-box-orient: vertical;
-// 					-webkit-line-clamp: 1;
-// 					overflow: hidden;
-// 					text-overflow: ellipsis;
-// 					white-space: normal;
-// 					line-clamp: 1;
-// 					max-width: 300px;
-// 					overflow-wrap: break-word;
-// 					@include break(xxs) {
-// 						max-width: 160px;
-// 					}
-// 				}
-// 			}
-// 			.input_images {
-// 				display: none;
-// 			}
-// 		}
-// 		.edit_subtask {
-// 			@include dFlex($jc: space-between);
-// 			width: 100%;
-// 			.edit_subtask_input {
-// 				@include font($size: 16px);
-// 				flex-grow: 1;
-// 				max-width: calc(100% - 57px);
-// 				border: none;
-// 				outline: none;
-// 			}
-// 		}
-// 	}
-// }
-
-// @mixin dropdown() {
-// 	position: absolute;
-// 	bottom: 10;
-// 	width: 100%;
-// 	max-height: 300px;
-// 	overflow-y: auto;
-// 	margin-top: -10px;
-// 	padding-top: 10px;
-// 	background-color: white;
-// 	border-radius: 0px 0px 10px 10px;
-// 	box-shadow: 0px 0px 14px 3px rgba(0, 0, 0, 0.04);
-// 	&::-webkit-scrollbar-button {
-// 		background: transparent;
-// 	}
-// 	.contact_list_item {
-// 		@include dFlex($jc: space-between);
-// 		width: 100%;
-// 		list-style-type: none;
-// 		padding: 7px 16px;
-// 		border-radius: 10px;
-// 		margin-bottom: 2px;
-// 		cursor: pointer;
-// 		&:hover {
-// 			background-color: $li-grey;
-// 		}
-// 		.contact {
-// 			@include dFlex($jc: flex-start);
-// 			gap: 16px;
-// 			.contact_name {
-// 				@include font($size: 20px);
-// 				@include break(sm) {
-// 					@include font($size: 16px);
-// 				}
-// 			}
-// 		}
-// 		.list_item_checkbox {
-// 			width: 24px;
-// 			height: 24px;
-// 			background-image: url('../../assets/img/check_unchecked.svg');
-// 		}
-// 	}
-// 	.selected_contact {
-// 		background-color: $pale-blue;
-// 		&:hover {
-// 			background-color: $dark-blue;
-// 		}
-// 		.contact {
-// 			.contact_name {
-// 				@include font($size: 20px, $color: white);
-// 				@include break(sm) {
-// 					@include font($size: 16px, $color: white);
-// 				}
-// 			}
-// 		}
-// 		.list_item_checkbox {
-// 			background-image: url('../../assets/img/check_checked_white.svg');
-// 		}
-// 	}
-// 	.category_list_item {
-// 		@include dFlex($jc: flex-start);
-// 		width: 100%;
-// 		list-style-type: none;
-// 		padding: 12px 16px;
-// 		border-radius: 10px;
-// 		margin-top: 2px;
-// 		cursor: pointer;
-// 		&:hover {
-// 			background-color: $li-grey;
-// 		}
-// 		.category_name {
-// 			@include font($size: 20px);
-// 			@include break(sm) {
-// 				@include font($size: 16px);
-// 			}
-// 		}
-// 	}
-// }

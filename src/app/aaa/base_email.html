@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Email</title>
+		<style>
+			* {
+				font-family: 'Roboto', sans-serif;
+				font-size: 16px;
+				color: #535456;
+				line-height: 21.71px;
+			}
+			.logo_box_top {
+				width: 100%;
+				display: flex;
+				justify-content: center;
+			}
+			.logo_box_bottom {
+				margin-top: 24px;
+			}
+			.purple {
+				color: #2e3edf;
+			}
+			a {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: fit-content;
+				height: 48px;
+				margin: 24px 0px;
+				padding: 0px 24px;
+				background-color: #2e3edf;
+				border-radius: 48px;
+				span {
+					font-family: 'DM Sans', sans-serif;
+					font-size: 18px;
+					font-weight: 700;
+					color: white;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		{% block content %} {% endblock %}
+	</body>
+</html>

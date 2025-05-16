@@ -1,6 +1,6 @@
-<footer [ngClass]="{ pre_login: utilityService.locationSig() == 'pre_login', post_login: utilityService.locationSig() == 'post_login' }" class="unselectable">
+<footer [ngClass]="{ pre_login: utilityService.inPreLogin(), post_login: utilityService.inPostLogin() || this.utilityService.inLegals() }">
 	<nav>
-		<a [routerLink]="['/privacy-policy']">Datenschutz</a>
-		<a [routerLink]="['/legal-notice']">Impressum</a>
+		<a [routerLink]="['/privacy-policy']" (click)="videoService.stopAll()">Datenschutz</a>
+		<a [routerLink]="['/legal-notice']" (click)="videoService.stopAll()">Impressum</a>
 	</nav>
 </footer>

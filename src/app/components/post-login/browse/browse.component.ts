@@ -1,193 +1,207 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
-import { VideoplayerComponent } from '../videoplayer/videoplayer.component';
-import { DbService } from '../../../services/db/db.service';
-import { UtilityService } from '../../../services/utility/utility.service';
-import { Video } from '../../../interfaces/video';
-import { environment } from '../../../../environments/environment';
-import { DomChangeDirective } from '../../../directives/dom-change.directive';
-import { Category } from '../../../interfaces/category';
-import { VideoService } from '../../../services/video/video.service';
+import { ChangeDetectorRef, Component, HostListener, inject, OnInit, signal } from "@angular/core";
+import { VideoplayerComponent } from "../videoplayer/videoplayer.component";
+import { DbService } from "../../../services/db/db.service";
+import { UtilityService } from "../../../services/utility/utility.service";
+import { Video } from "../../../interfaces/video";
+import { environment } from "../../../../environments/environment";
+import { DomChangeDirective } from "../../../directives/dom-change.directive";
+import { Category } from "../../../interfaces/category";
+import { VideoService } from "../../../services/video/video.service";
+import { VideoResponse } from "../../../interfaces/video-response";
+import { NgClass } from "@angular/common";
+import { CategoryComponent } from "../category/category.component";
 
 @Component({
-	selector: 'app-browse',
+	selector: "app-browse",
 	standalone: true,
-	imports: [VideoplayerComponent, DomChangeDirective],
-	templateUrl: './browse.component.html',
-	styleUrl: './browse.component.scss',
+	imports: [VideoplayerComponent, CategoryComponent, NgClass],
+	templateUrl: "./browse.component.html",
+	styleUrl: "./browse.component.scss",
 })
 export class BrowseComponent implements OnInit {
 	dbService = inject(DbService);
 	utilityService = inject(UtilityService);
 	videoService = inject(VideoService);
 
-	videosByCategorySig = signal<{ title: string; videos: Video[] }[]>([]);
-
 	categories: Category[] = [];
 	scrolling: Boolean = false;
-	categoryUrl = 'api/categories/';
-	videoUrl = 'api/videos/';
+	categoryUrl: string = "api/categories/";
+	videoUrl: string = "api/videos/";
+	videosToScroll: number = 1;
+	videoWidth: number = 292;
+	t: boolean = true;
 
-	constructor(private cdr: ChangeDetectorRef) {}
+	@HostListener("window:resize", ["$event"])
+	getScreenSize(event?: any) {
+		this.utilityService.scrHeight = window.innerHeight;
+		this.utilityService.scrWidth = window.innerWidth;
+		this.atBreakpoint(this.utilityService.scrWidth);
+	}
+
+	constructor(private cdr: ChangeDetectorRef) {
+		this.getScreenSize();
+	}
+
+	atBreakpoint(scrWidth: number) {
+		switch (true) {
+			case scrWidth < 1366:
+				this.videoWidth = 221;
+				break;
+			default:
+				this.videoWidth = 292;
+				break;
+		}
+	}
 
 	async ngOnInit(): Promise<void> {
-		// this.utilityService.measureConnectionSpeed();
 		this.utilityService.loading = true;
-		await this.openRandomVideo();
-		await this.getVideosByCategory();
+		this.utilityService.scrollPositionSig.update(() => 0);
+		await this.initVideos();
+		this.addResizeObserver();
 		this.utilityService.loading = false;
+	}
+
+	async initVideos() {
+		await this.openRandomVideo();
+		await this.addNewOnVideoflix();
+		await this.getCategories();
+		await this.addVideosByCategory();
+	}
+
+	addResizeObserver() {
+		const videoContainer = document.querySelector(".videos_by_category");
+		if (videoContainer) {
+			this.utilityService.observer = new ResizeObserver((entries) => {
+				entries.forEach((entry) => {
+					const displayableVideos = Math.floor(entry.contentRect.width / this.videoWidth);
+					if (displayableVideos != this.videosToScroll) this.updateVideoList(displayableVideos);
+				});
+			});
+			this.utilityService.observer.observe(videoContainer);
+		}
 	}
 
 	async openRandomVideo() {
 		try {
-			const randomVideo = await this.getRandomVideo();
-			this.videoService.mainVideoSig.update(() => randomVideo);
-			this.videoService.playVideo('background');
+			const videosResp = (await this.dbService.getData(this.videoUrl + this.getVideoFilters({}))) as VideoResponse;
+			const randomVideoIndex = Math.floor(Math.random() * videosResp.results.length);
+			const randomVideo = videosResp.results[randomVideoIndex];
+			if (randomVideo) {
+				this.videoService.mainVideoSig.update(() => randomVideo);
+				this.videoService.initVideoPlayer("background");
+			}
 		} catch (error) {
 			this.dbService.handleBackendErrors(error);
 		}
 	}
 
-	async getVideosByCategory(): Promise<void> {
+	async addNewOnVideoflix(): Promise<void> {
 		try {
-			const categories = await this.getCategories();
-			categories?.forEach((category) => this.addVideosToCategory(category));
+			const categoryElement = { id: 0, title: "New on Videoflix" };
+			const videosResp = (await this.dbService.getData(this.videoUrl + this.getVideoFilters({ ordering: "-created_at" }))) as VideoResponse;
+			this.addToVideoSignal(videosResp, categoryElement);
 		} catch (error) {
 			this.dbService.handleBackendErrors(error);
+		}
+	}
+
+	async getCategories(): Promise<void> {
+		try {
+			this.categories = (await this.dbService.getData(this.categoryUrl)) as Category[];
+		} catch (error) {
+			this.dbService.handleBackendErrors(error);
+		}
+	}
+
+	async addVideosByCategory(): Promise<void> {
+		try {
+			for (let i = 0; i < this.categories.length; i++) {
+				const categoryElement = this.categories[i];
+				const videosResp = (await this.dbService.getData(this.videoUrl + this.getVideoFilters({ category: categoryElement.id }))) as VideoResponse;
+				this.addToVideoSignal(videosResp, categoryElement);
+			}
+		} catch (error) {
+			this.dbService.handleBackendErrors(error);
+		}
+	}
+
+	addToVideoSignal(videosResp: VideoResponse, categoryElement: Category) {
+		if (videosResp.results.length > 0) {
+			this.videoService.videosByCategorySig.update((categories) => [
+				...categories,
+				{
+					count: videosResp.count,
+					next: videosResp.next!,
+					scrollable: videosResp.next ? true : false,
+					category: categoryElement,
+					videos: videosResp.results,
+				},
+			]);
+		}
+	}
+
+	updateVideoList(displayableVideos: number) {
+		this.videosToScroll = displayableVideos;
+		this.resetMargins();
+		this.updateVideos();
+	}
+
+	resetMargins() {
+		const nodes = document.querySelectorAll(".video_list") as NodeListOf<HTMLElement>;
+		for (let i = 0; i < nodes.length; i++) {
+			const videoList = nodes[i];
+			videoList.style.marginLeft = "0px";
+		}
+	}
+
+	async updateVideos(): Promise<void> {
+		try {
+			await this.updateNewOnVideoflix();
+			await this.updateVideosByCategory();
+		} catch (error) {
+			this.dbService.handleBackendErrors(error);
+		}
+	}
+
+	async updateNewOnVideoflix(): Promise<void> {
+		try {
+			const videosResp = (await this.dbService.getData(this.videoUrl + this.getVideoFilters({ ordering: "-created_at" }))) as VideoResponse;
+			this.changeVideoSignal(0, videosResp);
+		} catch (error) {
+			this.dbService.handleBackendErrors(error);
+		}
+	}
+
+	async updateVideosByCategory(): Promise<void> {
+		try {
+			for (let i = 0; i < this.videoService.videosByCategorySig().length; i++) {
+				const videoElement = this.videoService.videosByCategorySig()[i];
+				if (videoElement.category.title == "New on Videoflix") continue;
+				const videosResp = (await this.dbService.getData(this.videoUrl + this.getVideoFilters({ category: videoElement.category.id }))) as VideoResponse;
+				this.changeVideoSignal(i, videosResp);
+			}
+		} catch (error) {
+			this.dbService.handleBackendErrors(error);
+		}
+	}
+
+	changeVideoSignal(i: number, videosResp: VideoResponse) {
+		if (videosResp.results.length > 0) {
+			this.videoService.videosByCategorySig.update((categories) => {
+				categories[i].videos = videosResp.results;
+				categories[i].next = videosResp.next!;
+				categories[i].scrollable = videosResp.next ? true : false;
+				return categories;
+			});
 		}
 	}
 
 	getVideoFilters(params: { ordering?: string; category?: number }) {
-		return `?ordering=${params.ordering ?? ''}&category=${params.category ?? ''}`;
-	}
-
-	async getRandomVideo() {
-		const filterParams = {};
-		const videosResp = (await this.dbService.getData(this.videoUrl + this.getVideoFilters(filterParams))) as Video[];
-		const randomVideoIndex = Math.floor(Math.random() * videosResp.length);
-		return videosResp[randomVideoIndex];
-	}
-
-	async getCategories(): Promise<Category[] | null> {
-		try {
-			const categories = (await this.dbService.getData(this.categoryUrl)) as Category[];
-			return categories;
-		} catch (error) {
-			this.dbService.handleBackendErrors(error);
-			return null;
-		}
-	}
-
-	async addVideosToCategory(category: Category) {
-		const filterParams = { category: category.id };
-		const videosResp = (await this.dbService.getData(this.videoUrl + this.getVideoFilters(filterParams))) as Video[];
-		if (videosResp.length > 0) {
-			this.videosByCategorySig.update((categories) => [...categories, { title: category.title, videos: videosResp }]);
-		}
+		return `?ordering=${params.ordering ?? ""}&category=${params.category ?? ""}&page_size=${this.videosToScroll + 1}`;
 	}
 
 	onScrollVert(event: Event) {
 		const target = event.target as HTMLElement;
 		this.utilityService.scrollPositionSig.update(() => target.scrollTop);
-	}
-
-	async handleScroll(videoList: HTMLElement, direction: string) {
-		if (!this.scrolling) {
-			this.scrolling = true;
-			this.scrollInDirection(videoList, direction);
-			await this.utilityService.delay(300);
-			this.scrolling = false;
-		} else {
-			await this.utilityService.delay(50);
-			await this.handleScroll(videoList, direction);
-		}
-	}
-
-	scrollInDirection(videoList: HTMLElement, direction: string) {
-		const currentPosition = this.getCurrentPosition(videoList);
-		switch (direction) {
-			case 'right':
-				this.scrollRight(videoList, direction, currentPosition);
-				break;
-			case 'left':
-				this.scrollLeft(videoList, direction, currentPosition);
-				break;
-		}
-	}
-
-	scrollRight(videoList: HTMLElement, direction: string, currentData: { currentMargin: number; currentVideoListWidth: number }) {
-		const newMarginLeft = this.calculateNewMargin(videoList, direction);
-		if (!(-newMarginLeft > currentData.currentVideoListWidth)) {
-			videoList.style.marginLeft = `${newMarginLeft}px`;
-		}
-	}
-
-	scrollLeft(videoList: HTMLElement, direction: string, currentData: { currentMargin: number; currentVideoListWidth: number }) {
-		const newMarginLeft = this.calculateNewMargin(videoList, direction);
-		if (!(newMarginLeft >= 0)) {
-			videoList.style.marginLeft = `${newMarginLeft}px`;
-		} else {
-			videoList.style.marginLeft = `0px`;
-		}
-	}
-
-	getCurrentPosition(videoList: HTMLElement) {
-		const currentMargin = this.getCurrentMargin(videoList);
-		const currentVideoListWidth = this.getCurrentWidth(videoList);
-		return { currentMargin: currentMargin, currentVideoListWidth: currentVideoListWidth };
-	}
-
-	atMinScrollPosition(videoList: HTMLElement) {
-		const currentPosition = this.getCurrentPosition(videoList);
-		return -currentPosition.currentMargin <= 0;
-	}
-
-	atMaxScrollPosition(videoList: HTMLElement) {
-		const currentPosition = this.getCurrentPosition(videoList);
-		const newMarginLeft = this.calculateNewMargin(videoList, 'right');
-		return -newMarginLeft > currentPosition.currentVideoListWidth;
-	}
-
-	getCurrentWidth(videoList: HTMLElement) {
-		const width = getComputedStyle(videoList).width;
-		const widthToNumber = parseInt(width);
-		return widthToNumber;
-	}
-
-	getCurrentMargin(videoList: HTMLElement) {
-		const marginLeft = getComputedStyle(videoList).marginLeft;
-		const marginLeftToNumber = parseInt(marginLeft) === 0 ? 0 : parseInt(marginLeft);
-		return marginLeftToNumber === 0 ? 0 : marginLeftToNumber;
-	}
-
-	calculateNewMargin(videoList: HTMLElement, direction: string) {
-		const currentMargin = this.getCurrentMargin(videoList);
-		switch (direction) {
-			case 'right':
-				return currentMargin - 292.4 * 2;
-			case 'left':
-				return currentMargin + 292.4 * 2;
-		}
-		return 0;
-	}
-
-	toggleBgGradients(index: number, action: string) {
-		let elements = document.querySelectorAll(`.idx${index}`);
-		elements.forEach((element) => {
-			switch (action) {
-				case 'hide':
-					element.classList.add('disabled');
-					break;
-				case 'show':
-					element.classList.remove('disabled');
-					break;
-			}
-		});
-	}
-
-	async onDomChange(event: Event) {
-		for (let i = 0; i < 5; i++) {
-			await this.utilityService.delay(200);
-			this.cdr.detectChanges();
-		}
 	}
 }

@@ -16,6 +16,6 @@ import { VideoService } from '../../../services/video/video.service';
 	styleUrl: './main-page.component.scss',
 })
 export class MainPageComponent {
-	playerService = inject(VideoService);
+	videoService = inject(VideoService);
 	utilityService = inject(UtilityService);
 }

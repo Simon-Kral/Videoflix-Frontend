@@ -16,18 +16,16 @@ import { NgClass } from '@angular/common';
 })
 export class VideoplayerComponent {
 	@ViewChild('media', { static: true }) media!: ElementRef<HTMLVideoElement>;
-	@Input() bgVideo: boolean = false;
+	@Input() playInBackground: boolean = false;
 
-	playerService = inject(VideoService);
+	videoService = inject(VideoService);
 
 	videoBitrates?: BitrateOptions[];
 
 	constructor(private cdr: ChangeDetectorRef) {}
 
-	onPlayerReady(source: VgApiService) {
-		this.playerService.videoElement = this.media.nativeElement;
-		this.playerService.vgApi = source;
-		if (!this.bgVideo) this.handleFsVideo();
+	async onPlayerReady(source: VgApiService) {
+		await this.videoService.playVideo(this.media.nativeElement, source, this.playInBackground);
 	}
 
 	ngAfterViewInit(): void {
@@ -45,20 +43,6 @@ export class VideoplayerComponent {
 				return 'auto';
 			default:
 				return height + 'p';
-		}
-	}
-
-	handleFsVideo() {
-		this.playerService.vgApi.fsAPI.toggleFullscreen();
-		this.playerService.vgApi.fsAPI.onChangeFullscreen.subscribe((fullscreen) => {
-			this.onToggleFullscreen(fullscreen);
-		});
-	}
-
-	onToggleFullscreen(fullscreen: any) {
-		if (!fullscreen) {
-			this.playerService.fsVideoUrlSig.update(() => undefined);
-			this.playerService.playVideo('background');
 		}
 	}
 }

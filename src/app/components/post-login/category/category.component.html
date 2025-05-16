@@ -1,0 +1,26 @@
+<h2>{{ videoCategory!.category.title }}</h2>
+<div class="video_list_box" #videoListBox>
+	<div class="video_list" #videoList (domChange)="onDomChange($event)">
+		@for (video of videoCategory!.videos; track video.id; let j = $index) {
+		<div class="videoBox" (mouseenter)="toggleBgGradients(index!, 'hide')" (mouseleave)="toggleBgGradients(index!, 'show')" (click)="videoService.openVideo(video); scrollToTop(main!)">
+			<span class="title">{{ video.title }}</span>
+			<img class="thumbnail" src="{{ video.thumbnail }}" />
+		</div>
+		}
+	</div>
+	@if (!(atMinScrollPosition(videoList))) {
+	<button class="scroll_arrow left">
+		<div class="bg_gradient idx{{ index }}" #bgGradientLeft>
+			<img src="assets/icons/arrow_forward.webp" />
+		</div>
+	</button>
+	<div class="hoverbox left" (mouseenter)="bgGradientLeft.classList.add('hover')" (mouseleave)="bgGradientLeft.classList.remove('hover')" (click)="handleScroll(videoList, 'left', index!)"></div>
+	} @if (!atMaxScrollPosition(videoList, videoCategory!.count, index!) && videoCategory!.scrollable) {
+	<button class="scroll_arrow right">
+		<div class="bg_gradient idx{{ index }}" #bgGradientRight>
+			<img src="assets/icons/arrow_forward.webp" />
+		</div>
+	</button>
+	<div class="hoverbox right" (mouseenter)="bgGradientRight.classList.add('hover')" (mouseleave)="bgGradientRight.classList.remove('hover')" (click)="handleScroll(videoList, 'right', index!)"></div>
+	}
+</div>

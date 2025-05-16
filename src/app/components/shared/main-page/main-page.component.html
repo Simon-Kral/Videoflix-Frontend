@@ -1,7 +1,7 @@
 @if (this.utilityService.bgImageSig()) {
 <div class="bg_img" [ngStyle]="{ 'background-image': this.utilityService.bgImageSig() }"></div>
-} @if (this.playerService.bgVideoUrlSig()) {
-<app-videoplayer class="bg_video" [bgVideo]="true"></app-videoplayer>
+} @if (this.videoService.bgVideoUrlSig()) {
+<app-videoplayer class="bg_video" [playInBackground]="true"></app-videoplayer>
 }
 <div class="bg_grad"></div>
 <app-header></app-header>

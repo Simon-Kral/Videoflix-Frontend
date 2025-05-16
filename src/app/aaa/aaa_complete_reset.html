@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Email</title>
+		<style>
+			* {
+				font-family: 'Roboto', sans-serif;
+				font-size: 16px;
+				color: #535456;
+				line-height: 21.71px;
+			}
+			.logo_box_top {
+				width: 100%;
+				display: flex;
+				justify-content: center;
+			}
+			.logo_box_bottom {
+				margin-top: 24px;
+			}
+			.purple {
+				color: #2e3edf;
+			}
+			a {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: fit-content;
+				height: 48px;
+				margin: 24px 0px;
+				padding: 0px 24px;
+				background-color: #2e3edf;
+				border-radius: 48px;
+				span {
+					font-family: 'DM Sans', sans-serif;
+					font-size: 18px;
+					font-weight: 700;
+					color: white;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="logo_box_top">
+			<img src="http://localhost:4200/assets/logos/logo_w_text.webp" />
+		</div>
+		<p>Hello,<br /><br />We recently received a request to reset your password. If you made this request, please click on the following link to reset your password:</p>
+		<a href="{{url}}"><span>Reset password</span></a>
+		<p>Please note that for security reasons, this link is only valid for 24 hours.<br /><br />If you did not request a password reset, please ignore this email.<br /><br />Best regards,<br /><br />Your Videoflix Team.</p>
+		<div class="logo_box_bottom">
+			<img src="http://localhost:4200/assets/logos/logo_w_text.webp" />
+		</div>
+	</body>
+</html>

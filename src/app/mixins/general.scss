@@ -38,12 +38,12 @@ $breakpoints: (
 	@include dFlex();
 	@include font($size: 18px, $weight: 700, $color: white);
 	gap: 4px;
-	line-height: 23px;
 	border-radius: 48px;
-	padding: 12.5px 24px;
+	padding: 12px 24px;
 	background-color: $purple;
 	border: none;
 	cursor: pointer;
+	box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.6);
 	&:enabled:hover {
 		background-color: $purple-hover;
 	}
@@ -53,6 +53,9 @@ $breakpoints: (
 	&:disabled {
 		background-color: $purple-50 !important;
 	}
+	span {
+		min-height: 24px;
+	}
 	img {
 		width: 24px;
 		height: 24px;
@@ -60,6 +63,15 @@ $breakpoints: (
 	}
 	// responsive
 	@include break(sm) {
+		@include font($size: 15px, $weight: 700, $color: white);
+		padding: 10px 20px;
+		span {
+			min-height: 20px;
+		}
+		img {
+			width: 20px;
+			height: 20px;
+		}
 	}
 }
 
@@ -90,15 +102,14 @@ $breakpoints: (
 		color: $disabled;
 	}
 	// responsive
-	@include break(sm) {
-		@include font($size: 16px, $color: $pale-blue);
-		height: calc($height - 8px);
-	}
+	// @include break(sm) {
+	// 	@include font($size: 16px, $color: $pale-blue);
+	// 	height: calc($height - 8px);
+	// }
 }
 
 @mixin separator($width, $height, $color) {
 	width: $width;
 	height: $height;
 	background-color: $color;
-	border-radius: 32px;
 }
